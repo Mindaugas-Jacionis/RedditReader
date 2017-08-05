@@ -3,11 +3,14 @@ import { Navigation } from 'react-native-navigation';
 import { createStore, applyMiddleware, combineReducers } from 'redux';
 import { Provider } from 'react-redux';
 import thunk from "redux-thunk";
+import { ApiMiddleware } from './utils';
+import { host } from './utils/Constants';
 import { registerScreens } from './screens';
 import { Style } from './components/ui';
 import * as reducers from "./reducers";
 
-const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
+const middlewares = [thunk, ApiMiddleware(host)];
+const createStoreWithMiddleware = applyMiddleware(...middlewares)(createStore);
 const reducer = combineReducers(reducers);
 const store = createStoreWithMiddleware(reducer);
 
@@ -15,8 +18,6 @@ registerScreens(store, Provider);
 
 class App {
   constructor() {
-    // store.subscribe(this.onStoreUpdate.bind(this));
-
     this.startApp();
     console.disableYellowBox = true;
   }

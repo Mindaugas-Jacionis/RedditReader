@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import { ListView, View, Text, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import { Style, LoadingView, Title, CardView } from '../../components/ui';
-import { chanel } from '../../utils/Constants';
+import { Tools } from '../../utils';
+import { noImage } from '../../utils/Constants';
+import * as homeActions from '../../reducers/home/actions';
 
 class HomeScreen extends Component {
   constructor(props) {
@@ -10,36 +12,28 @@ class HomeScreen extends Component {
     const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
     this.state = {
       dataSource: ds.cloneWithRows([]),
-      data: [],
-      isLoading: false,
-      after: ''
+      data: []
     };
   }
 
   componentWillMount() {
-    this.request();
+    this.fetch();
   }
 
-  request(after = '') {
+  componentWillReceiveProps(nextProps) {
     const { dataSource } = this.state;
-    this.setState({ isLoading: true });
+    const { posts } = nextProps;
 
-    return fetch(`${chanel}?after=${after}`)
-      .then((response) => response.json())
-      .then((json) => {
-        const { after, children } = json.data;
-
-        this.setState({
-          dataSource: dataSource.cloneWithRows(children),
-          data: children,
-          isLoading: false,
-          after
-        });
-      })
-      .catch((error) => {
-        console.log('Error:', error);
-        this.setState({ isLoading: false });
+    if (!Tools.compare(posts, this.props.posts)) {
+      this.setState({
+        dataSource: dataSource.cloneWithRows(posts)
       });
+    }
+  }
+
+  fetch(after = '') {
+    const { dispatch } = this.props;
+    dispatch(homeActions.fetch(after));
   }
 
   renderLoading() {
@@ -49,6 +43,14 @@ class HomeScreen extends Component {
   }
 
   renderEmpty() {
+    const { errorMessage } = this.props;
+
+    if (errorMessage) {
+      return (
+        <Text>{errorMessage || 'No error'}</Text>
+      );
+    }
+
     return (
       <Title
         text={'Chanel is empty, please try later'}
@@ -62,51 +64,53 @@ class HomeScreen extends Component {
     const { errorMessage } = this.props;
 
     return (
-      <Text>{errorMessage || 'No error'}</Text>
+      <Text>{errorMessage}</Text>
     );
   }
 
-  renderRow({data}) {
-    const { title, permalink, preview } = data;
-    const { url } = preview.images['0'].source;
-    console.log('data', url);
+  renderRow(data) {
+    const { title, permalink, preview, url, id } = data;
+    const imgUrl = idx(preview, p => p.images['0'].source.url) || noImage;
 
     return (
-      <CardView title={title} image={url} link={permalink}/>
+      <CardView title={title} image={url} link={permalink} id={id}/>
     );
   }
 
   renderContent() {
     const { dataSource } = this.state;
+    const { errorMessage, isFetching } = this.props;
 
     return (
       <ListView
         dataSource={dataSource}
         renderRow={(data) => this.renderRow(data)}
-        renderHeader={() => this.renderHeader()}
-        renderFooter={() => this.renderLoading()}
+        renderHeader={() => errorMessage && this.renderHeader()}
+        renderFooter={() => isFetching && this.renderLoading()}
       />
     );
   }
 
   render() {
-    const { data, isLoading } = this.state;
-    const content = data.length ? this.renderContent() : this.renderEmpty();
-
+    const { isFetching, posts } = this.props;
+    const content = posts.length ? this.renderContent() : this.renderEmpty();
 
     return (
       <View style={styles.container}>
-        { isLoading ? this.renderLoading() : content }
+        { isFetching ? this.renderLoading() : content }
       </View>
     );
   }
 }
 
 function mapStateToProps(state, props) {
+  const { isFetching, errorMessage, posts, after } = state.home;
+
   return {
-    isFetching: state.home.isFetching,
-    errorMessage: state.home.errorMessage,
-    posts: state.home.posts
+    isFetching,
+    errorMessage,
+    posts,
+    after
   }
 }
 
