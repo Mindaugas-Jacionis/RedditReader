@@ -11,8 +11,7 @@ class HomeScreen extends Component {
     super(props);
     const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
     this.state = {
-      dataSource: ds.cloneWithRows([]),
-      data: []
+      dataSource: ds.cloneWithRows([])
     };
   }
 
@@ -34,6 +33,15 @@ class HomeScreen extends Component {
   fetch(after = '') {
     const { dispatch } = this.props;
     dispatch(homeActions.fetch(after));
+  }
+
+  onPress(permalink, id) {
+    const { navigator } = this.props;
+
+    navigator.push({
+      screen: 'RedditReader.PostWebScreen',
+      passProps: { permalink, id }
+    });
   }
 
   renderLoading() {
@@ -73,7 +81,11 @@ class HomeScreen extends Component {
     const imgUrl = idx(preview, p => p.images['0'].source.url) || noImage;
 
     return (
-      <CardView title={title} image={url} link={permalink} id={id}/>
+      <CardView
+        title={title}
+        image={url}
+        onPress={() => this.onPress(permalink, id)}
+      />
     );
   }
 

@@ -36,6 +36,7 @@
 		2DCD954D1E0B4F2C00145EB5 /* RedditReaderTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* RedditReaderTests.m */; };
 		5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
+		AE2F27C71F364C6C00D655B9 /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AE2F27BD1F364C6C00D655B9 /* Ionicons.ttf */; };
 		AE456E6D1F33085C0065CE94 /* libReactNativeNavigation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AE456E6C1F33084E0065CE94 /* libReactNativeNavigation.a */; };
 /* End PBXBuildFile section */
 
@@ -291,6 +292,7 @@
 		5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTAnimation.xcodeproj; path = "../node_modules/react-native/Libraries/NativeAnimation/RCTAnimation.xcodeproj"; sourceTree = "<group>"; };
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
+		AE2F27BD1F364C6C00D655B9 /* Ionicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Ionicons.ttf; sourceTree = "<group>"; };
 		AE456E421F33084D0065CE94 /* ReactNativeNavigation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ReactNativeNavigation.xcodeproj; path = "../node_modules/react-native-navigation/ios/ReactNativeNavigation.xcodeproj"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -510,6 +512,7 @@
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* RedditReaderTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
+				AE2F27B81F364C6C00D655B9 /* Fonts */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -524,6 +527,15 @@
 				2D02E4901E0B4A5D006451C7 /* RedditReader-tvOSTests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		AE2F27B81F364C6C00D655B9 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				AE2F27BD1F364C6C00D655B9 /* Ionicons.ttf */,
+			);
+			name = Fonts;
+			path = "../node_modules/react-native-vector-icons/Fonts";
 			sourceTree = "<group>";
 		};
 		AE456E431F33084D0065CE94 /* Products */ = {
@@ -930,6 +942,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				AE2F27C71F364C6C00D655B9 /* Ionicons.ttf in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

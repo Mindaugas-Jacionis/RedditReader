@@ -2,8 +2,10 @@ const Style = {
   colors: {
     black: '#000000',
     white: '#ffffff',
+    transparentWhite: 'rgba(255, 255, 255, 0.7)',
     grey: '#c6c6c6',
     orange: '#ff4500',
+    transparentOrange: 'rgba(255, 69, 0, 0.7)',
     blue: '#336699',
     lightBlue: '#cee3f8'
   },
