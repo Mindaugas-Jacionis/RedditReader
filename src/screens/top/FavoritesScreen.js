@@ -93,12 +93,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Style.colors.lightBlue,
-    justifyContent: 'center',
     paddingHorizontal: Style.spaces.s
   },
 
   empty: {
-    textAlign: 'center'
+    textAlign: 'center',
+    paddingVertical: Style.spaces.m
   }
 });
 

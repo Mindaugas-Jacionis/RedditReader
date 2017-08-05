@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ListView, View, Text, StyleSheet } from 'react-native';
+import { ListView, View, Text, TextInput, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import { Style, LoadingView, Title, CardView } from '../../components/ui';
 import { Tools } from '../../utils';
@@ -12,7 +12,8 @@ class HomeScreen extends Component {
     super(props);
     const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
     this.state = {
-      dataSource: ds.cloneWithRows([])
+      dataSource: ds.cloneWithRows([]),
+      searchQuery: ''
     };
   }
 
@@ -21,13 +22,11 @@ class HomeScreen extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { dataSource } = this.state;
+    const { searchQuery } = this.state;
     const { posts } = nextProps;
 
     if (!Tools.compare(posts, this.props.posts)) {
-      this.setState({
-        dataSource: dataSource.cloneWithRows(posts)
-      });
+      this.setDataSource(posts, searchQuery);
     }
   }
 
@@ -45,6 +44,32 @@ class HomeScreen extends Component {
     });
   }
 
+  setDataSource(posts = [], searchQuery = '') {
+    const { dataSource } = this.state;
+    const query = searchQuery.toLowerCase();
+    let filteredPosts = posts;
+
+    if (query.length >= 3) {
+      filteredPosts = _.filter(
+        posts, post => post.title.toLowerCase().indexOf(query) !== -1
+      );
+    }
+
+    this.setState({
+      dataSource: dataSource.cloneWithRows(filteredPosts)
+    });
+  }
+
+  handleSearch(searchQuery) {
+    const previousSearchQuery = this.state.searchQuery;
+    const { posts } = this.props;
+    this.setState({ searchQuery: searchQuery });
+
+    if (searchQuery.length >= 3 || previousSearchQuery.length >= 3) {
+      this.setDataSource(posts, searchQuery);
+    }
+  }
+
   renderLoading() {
     return (
       <LoadingView />
@@ -56,7 +81,7 @@ class HomeScreen extends Component {
 
     if (errorMessage) {
       return (
-        <Text>{errorMessage || 'No error'}</Text>
+        <Text>{errorMessage}</Text>
       );
     }
 
@@ -64,8 +89,23 @@ class HomeScreen extends Component {
       <Title
         text={'Chanel is empty, please try later'}
         level={'h3'}
-        style={styles.title}
+        style={styles.empty}
       />
+    );
+  }
+
+  renderSearch() {
+    const { searchQuery } = this.state;
+
+    return (
+      <View style={styles.search}>
+        <TextInput
+          style={styles.input}
+          onChangeText={(text) => this.handleSearch(text)}
+          value={searchQuery}
+          placeholder={'Search by title'}
+        />
+      </View>
     );
   }
 
@@ -95,14 +135,18 @@ class HomeScreen extends Component {
     const { errorMessage, isFetching, after } = this.props;
 
     return (
-      <ListView
-        dataSource={dataSource}
-        renderRow={(data) => this.renderRow(data)}
-        renderHeader={() => errorMessage && this.renderHeader()}
-        renderFooter={() => isFetching && this.renderLoading()}
-        onEndReached={() => after && this.fetch(after)}
-        onEndReachedThreshold={800}
-      />
+      <View>
+        {this.renderSearch()}
+        <ListView
+          dataSource={dataSource}
+          renderRow={(data) => this.renderRow(data)}
+          renderHeader={() => errorMessage && this.renderHeader()}
+          renderFooter={() => isFetching && this.renderLoading()}
+          onEndReached={() => after && this.fetch(after)}
+          onEndReachedThreshold={800}
+          style={styles.list}
+        />
+      </View>
     );
   }
 
@@ -134,13 +178,29 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Style.colors.lightBlue,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: Style.spaces.s
   },
 
-  title: {
-    textAlign: 'center'
+  list : {
+    paddingHorizontal: Style.spaces.s,
+    paddingBottom: Style.spaces.m
+  },
+
+  empty: {
+    textAlign: 'center',
+    paddingVertical: Style.spaces.m
+  },
+
+  search: {
+    backgroundColor: Style.colors.transparentWhite,
+    padding: Style.spaces.s
+  },
+
+  input: {
+    height: 45,
+    fontSize: 20,
+    backgroundColor: Style.colors.transparentOrange,
+    paddingHorizontal: Style.spaces.s,
+    borderRadius: Style.radius.default
   }
 });
 
