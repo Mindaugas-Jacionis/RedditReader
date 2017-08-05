@@ -5,11 +5,19 @@ import Title from './Title';
 import Style from './Style';
 
 class CardView extends Component {
+  onPress() {
+    const { onPress } = this.props;
+    onPress && onPress();
+  }
+  
   render() {
-    const { style, image, title, link } = this.props;
+    const { style, image, title } = this.props;
 
     return (
-      <TouchableOpacity style={[styles.container, style]} onPress={() => alert(link)}>
+      <TouchableOpacity
+        style={[styles.container, style]}
+        onPress={() => this.onPress()}
+      >
         <Image
           source={{uri: image}}
           style={styles.image}

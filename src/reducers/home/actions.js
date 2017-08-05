@@ -1,4 +1,3 @@
-import { chanel } from '../../utils/Constants'
 import * as types from './actionTypes';
 
 export function fetch(query) {
@@ -6,7 +5,6 @@ export function fetch(query) {
 
   return {
     types: [types.FETCH, types.SUCCESS, types.FAILURE],
-    api: (api) => api(`r/ProgrammerHumor.json`),
-    query: q
+    api: (api) => api(`r/ProgrammerHumor.json`)
   }
 }
