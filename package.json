@@ -3,7 +3,7 @@
 	"version": "0.0.1",
 	"private": true,
 	"scripts": {
-		"debug-android": "bash start-new-packager.sh && bash debug-android.sh",
+		"debug-android": "bash debug-android.sh",
 		"start": "node node_modules/react-native/local-cli/cli.js start",
 		"test": "jest"
 	},

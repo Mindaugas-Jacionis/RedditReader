@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import { View, TouchableOpacity, WebView, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
-import { Style, LoadingView } from '../../components/ui';
-import { host } from '../../utils/Constants';
+import { Style, NavigationStyle, LoadingView } from '../../components/ui';
+import { host, isApple } from '../../utils/Constants';
 import * as postsActions from '../../reducers/posts/actions';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 class PostWebScreen extends Component {
+  static navigatorStyle = NavigationStyle.navTabBarHidden;
+
   constructor(props) {
     super(props);
   }
@@ -77,7 +79,7 @@ const styles = StyleSheet.create({
   icon: {
     width: '100%',
     textAlign: 'center',
-    lineHeight: 50,
+    lineHeight: isApple ? 50 : 40,
     backgroundColor: 'transparent'
   }
 });
