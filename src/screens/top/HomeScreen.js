@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { ListView, View, Text, StyleSheet } from 'react-native';
+import { connect } from 'react-redux';
 import { Style, LoadingView, Title, CardView } from '../../components/ui';
 import { chanel } from '../../utils/Constants';
 
@@ -57,6 +58,14 @@ class HomeScreen extends Component {
     );
   }
 
+  renderHeader() {
+    const { errorMessage } = this.props;
+
+    return (
+      <Text>{errorMessage || 'No error'}</Text>
+    );
+  }
+
   renderRow({data}) {
     const { title, permalink, preview } = data;
     const { url } = preview.images['0'].source;
@@ -74,6 +83,8 @@ class HomeScreen extends Component {
       <ListView
         dataSource={dataSource}
         renderRow={(data) => this.renderRow(data)}
+        renderHeader={() => this.renderHeader()}
+        renderFooter={() => this.renderLoading()}
       />
     );
   }
@@ -91,6 +102,14 @@ class HomeScreen extends Component {
   }
 }
 
+function mapStateToProps(state, props) {
+  return {
+    isFetching: state.home.isFetching,
+    errorMessage: state.home.errorMessage,
+    posts: state.home.posts
+  }
+}
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -105,4 +124,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default HomeScreen;
+export default connect(mapStateToProps)(HomeScreen);
