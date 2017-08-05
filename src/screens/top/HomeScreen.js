@@ -5,6 +5,7 @@ import { Style, LoadingView, Title, CardView } from '../../components/ui';
 import { Tools } from '../../utils';
 import { noImage } from '../../utils/Constants';
 import * as homeActions from '../../reducers/home/actions';
+import _ from 'underscore';
 
 class HomeScreen extends Component {
   constructor(props) {
@@ -91,7 +92,7 @@ class HomeScreen extends Component {
 
   renderContent() {
     const { dataSource } = this.state;
-    const { errorMessage, isFetching } = this.props;
+    const { errorMessage, isFetching, after } = this.props;
 
     return (
       <ListView
@@ -99,17 +100,20 @@ class HomeScreen extends Component {
         renderRow={(data) => this.renderRow(data)}
         renderHeader={() => errorMessage && this.renderHeader()}
         renderFooter={() => isFetching && this.renderLoading()}
+        onEndReached={() => after && this.fetch(after)}
+        onEndReachedThreshold={800}
       />
     );
   }
 
   render() {
     const { isFetching, posts } = this.props;
-    const content = posts.length ? this.renderContent() : this.renderEmpty();
+    const hasPosts = posts.length > 0;
+    const content = hasPosts ? this.renderContent() : this.renderEmpty();
 
     return (
       <View style={styles.container}>
-        { isFetching ? this.renderLoading() : content }
+        { isFetching && !hasPosts ? this.renderLoading() : content }
       </View>
     );
   }
