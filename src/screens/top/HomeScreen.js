@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
 import { ListView, View, Text, TextInput, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
-import { Style, LoadingView, Title, CardView } from '../../components/ui';
+import { Style, NavigationStyle, LoadingView, Title, CardView } from '../../components/ui';
 import { Tools } from '../../utils';
 import { noImage } from '../../utils/Constants';
 import * as homeActions from '../../reducers/home/actions';
 import _ from 'underscore';
 
 class HomeScreen extends Component {
+  static navigatorStyle = NavigationStyle.bottom;
+
   constructor(props) {
     super(props);
     const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
@@ -104,6 +106,7 @@ class HomeScreen extends Component {
           onChangeText={(text) => this.handleSearch(text)}
           value={searchQuery}
           placeholder={'Search by title'}
+          underlineColorAndroid={'transparent'}
         />
       </View>
     );
@@ -144,7 +147,7 @@ class HomeScreen extends Component {
           renderFooter={() => isFetching && this.renderLoading()}
           onEndReached={() => after && this.fetch(after)}
           onEndReachedThreshold={800}
-          style={styles.list}
+          contentContainerStyle={styles.list}
         />
       </View>
     );
@@ -182,7 +185,7 @@ const styles = StyleSheet.create({
 
   list : {
     paddingHorizontal: Style.spaces.s,
-    paddingBottom: Style.spaces.m
+    paddingBottom: Style.spaces.xl
   },
 
   empty: {

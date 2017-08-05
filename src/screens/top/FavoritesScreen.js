@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import { View, ListView, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
-import { Style, CardView, Title } from '../../components/ui';
+import { Style, NavigationStyle, CardView, Title } from '../../components/ui';
 import { Tools } from '../../utils';
 import _ from 'underscore';
 
 class FavoritesScreen extends Component {
+  static navigatorStyle = NavigationStyle.bottom;
+
   constructor(props) {
     super(props);
     const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
