@@ -9,13 +9,13 @@ class CardView extends Component {
     const { style, image, title, link } = this.props;
 
     return (
-      <View style={[styles.container, style]}>
+      <TouchableOpacity style={[styles.container, style]} onPress={() => alert(link)}>
         <Image
           source={{uri: image}}
           style={styles.image}
         />
         <Title text={title} style={styles.title} level={'h4'} />
-      </View>
+      </TouchableOpacity>
     );
   }
 }

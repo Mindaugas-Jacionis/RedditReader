@@ -1,15 +1,16 @@
 import * as types from './actionTypes';
 import Immutable from 'seamless-immutable';
 import _ from 'underscore';
-// import Tools from '../../utils/Tools';
+import { Tools } from '../../utils';
 
 const initialState = Immutable({
   isFetching: false,
   errorMessage: false,
-  posts: []
+  posts: [],
+  after: ''
 });
 
-export default function search(state=initialState, action={}){
+export default function home(state=initialState, action={}){
   switch (action.type) {
     case types.FETCH:
       return Object.assign({}, state, {
@@ -17,14 +18,15 @@ export default function search(state=initialState, action={}){
         errorMessage: false
       });
     case types.SUCCESS:
-      console.log('SUCCESS', action.payload);
+      const newData = _.pluck(action.payload.data.children, 'data');
 
       return Object.assign({}, state, {
         isFetching: false,
-        errorMessage: false
+        errorMessage: false,
+        after: action.payload.data.after,
+        posts: Tools.merge(state.posts, newData, 'id')
       });
     case types.FAILURE:
-      let payload = action.payload || {};
       return Object.assign({}, state, {
         isFetching: false,
         errorMessage: 'Unable to load content, please try later.'
