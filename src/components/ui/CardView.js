@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, Image, TouchableOpacity } from 'react-native';
-import { isApple } from '../../utils/Constants';
+import { isApple, noImage } from '../../utils/Constants';
 import Title from './Title';
 import Style from './Style';
 
@@ -9,9 +9,24 @@ class CardView extends Component {
     const { onPress } = this.props;
     onPress && onPress();
   }
-  
+
+  formatImg() {
+    const { image } = this.props;
+    const empty = image === '';
+    const wrongImgur = image.indexOf('imgur') !== -1 && image.indexOf('i.imgur') === -1;
+    /* Line bellow could be improved */
+    const isSomethingElse = image.indexOf('imgur') === -1 && image.indexOf('i.redd') === -1 && image.indexOf('media.giphy') === -1;
+
+    if (wrongImgur || empty || isSomethingElse) {
+      return noImage;
+    }
+
+    return image.replace('http://', 'https://');
+  }
+
   render() {
     const { style, image, title } = this.props;
+    const uri = this.formatImg();
 
     return (
       <TouchableOpacity
@@ -19,7 +34,7 @@ class CardView extends Component {
         onPress={() => this.onPress()}
       >
         <Image
-          source={{uri: image}}
+          source={{ uri }}
           style={styles.image}
         />
         <Title text={title} style={styles.title} level={'h4'} />
