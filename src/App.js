@@ -26,9 +26,9 @@ class App {
     Navigation.startTabBasedApp({
       tabs: [
         {
-          label: 'Home',
+          label: 'Programmer Humor',
           screen: 'RedditReader.HomeScreen',
-          title: 'Home',
+          title: 'Programmer Humor',
           icon: require('./assets/icons/Home.png'),
           selectedIcon: require('./assets/icons/HomeSelected.png')
         },
