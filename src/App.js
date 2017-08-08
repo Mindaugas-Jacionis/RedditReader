@@ -1,20 +1,27 @@
 import React from 'react';
+import { AsyncStorage } from 'react-native';
 import { Navigation } from 'react-native-navigation';
-import { createStore, applyMiddleware, combineReducers } from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
 import { Provider } from 'react-redux';
 import thunk from "redux-thunk";
+import { persistStore, autoRehydrate } from 'redux-persist';
+import reducer from './reducers';
 import { ApiMiddleware } from './utils';
 import { host } from './utils/Constants';
 import { registerScreens } from './screens';
 import { Style } from './components/ui';
-import * as reducers from "./reducers";
+
+const persistorConfig = {
+  whitelist: [ 'posts' ],
+  storage: AsyncStorage
+};
 
 const middlewares = [thunk, ApiMiddleware(host)];
-const createStoreWithMiddleware = applyMiddleware(...middlewares)(createStore);
-const reducer = combineReducers(reducers);
-const store = createStoreWithMiddleware(reducer);
+const toolChain = [ autoRehydrate(), applyMiddleware(...middlewares) ];
+const store = compose(...toolChain)(createStore)(reducer, {});
+const persistor = persistStore(store, persistorConfig);
 
-registerScreens(store, Provider);
+registerScreens(store, Provider, persistor);
 
 class App {
   constructor() {
