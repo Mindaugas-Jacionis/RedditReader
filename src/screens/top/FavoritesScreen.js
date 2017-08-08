@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, ListView, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import { Style, NavigationStyle, CardView, Title } from '../../components/ui';
+import { noImage } from '../../utils/Constants';
 import { Tools } from '../../utils';
 import _ from 'underscore';
 

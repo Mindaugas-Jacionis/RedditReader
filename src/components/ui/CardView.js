@@ -21,7 +21,7 @@ class CardView extends Component {
       return noImage;
     }
 
-    return image.replace('http://', 'https://');
+    return image.replace('http://', 'https://').replace('.gifv', '.gif');
   }
 
   render() {
